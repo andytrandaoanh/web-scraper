@@ -1,43 +1,39 @@
 import re
 
 
-mySpan = """<span class="ind">A nocturnal badger-sized burrowing mammal of Africa, with long ears, a tubular snout, 
-and a long extensible tongue, feeding on ants and termites.</span>"""
+mySpan = """<strong class="phrase">come amid</strong>"""
 
-myPat = '<span class="ind">'
+myPat = 'span class="hw"'
 
-
-
-def checkNode(mySpan, myPat):
-	pattern = re.compile(myPat)
-	match = re.match(pattern, mySpan)
-	if (match):
-		return True
-	else:
-		return False
-
+def extractStrong(myStrong):
+	inputText = str(myStrong)
+	regPat = r'<strong class="[\w\-\s]+">[\w\s,().]+'
+	pattern = re.compile(regPat)
+	finds = re.findall(pattern, inputText)
+	if(finds):
+		find = finds[0]
+		temp = find.split(">")
+		return(str(temp[1]))
 
 
-def extractIPA(mySpan):
-	items = mySpan.split('/')
-	print('/' + items[1] + '/')
+
+def extractContent(mySpan):
+	inputText = str(mySpan)
+	regPat = r'<span class="[\w\-\s]+">[\w]+'
+	pattern = re.compile(regPat)
+	finds = re.findall(pattern, inputText)
+	if(finds):
+		find = finds[0]
+		temp = find.split(">")
+		return(temp[1])
+
+def extractP(myP):
+	inputText = str(myP)
+	outText = inputText.replace('<p>', '')
+	outText = outText.replace('</p>', '')
+	return str(outText)
 
 
-def extractWord(mySpan, myPat):
-	inputString = str(mySpan)
-	pattern = re.compile(myPat)
-	matchObj = re.match(pattern, inputString)
-	if(matchObj):
-		temp = mySpan.split(myPat)
-		myCont = temp[1].replace('\n', '')
-		myCont = myCont.replace('</span>', '')
-		return myCont
-	
-	#temp = str(mySpan).split(startSpan)
-	#pattern = re.compile(startSpan)
-	
-	#print(matchObj)
-	
+cont = extractStrong(mySpan)
+print(cont)
 
-
-print(extractWord(mySpan, myPat))

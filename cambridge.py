@@ -13,7 +13,7 @@ from process_lexico_2 import processPage
 def getLexico(word, session, headers):
 
 	#result = requests.get("https://www.lexico.com/en/definition/" + word)
-	url =  "https://www.lexico.com/en/definition/" + word
+	url =  "https://dictionary.cambridge.org/dictionary/english/" + word
 	result = session.get(url, headers=headers)
 
 
@@ -21,21 +21,21 @@ def getLexico(word, session, headers):
 
 	soup = BeautifulSoup(src, 'lxml')
 
-	#print(soup.prettify())
+	print(soup.prettify())
 
 
-	scans = soup.find_all(["span", "strong", {"class": "syn"}, "p"])
+	#scans = soup.find_all(["span", "strong", {"class": "syn"}, "p"])
 
 	#print(scans)
 
-	wordObject = processPage(scans)
+	#wordObject = processPage(scans)
 
-	return(wordObject)
+	#return(wordObject)
 
 
 if __name__ == "__main__":
 
-	WORD = "sheep"
+	WORD = "man"
 	dirOut = "E:/FULLTEXT/LEXICO" 
 	pathOut = dirOut + '/' +  WORD + ".json"
 	session, headers = getSafeSession()
@@ -43,6 +43,6 @@ if __name__ == "__main__":
 	#print('headers', headers)
 	wordObject = getLexico(WORD, session, headers)
 	#print(wordObject)
-	writeJSON(wordObject, pathOut)
-	openDir(dirOut)
+	#writeJSON(wordObject, pathOut)
+	#openDir(dirOut)
 	
