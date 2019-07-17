@@ -3,46 +3,53 @@ from bs4 import BeautifulSoup
 import lxml
 import re
 from system_handler import writeJSON, openDir
-from get_mp3 import getAudio
-from tor import getSafeSession
-from process_lexico_2 import processPage
+from alternate_agent import getRamdomUserAgent
+from start_private_proxy import startPrivateProxy
 
 
 
 
-def getLexico(word, session, headers):
+def getLexico(word, proxies, headers):
+	DATA_STATUS_OK = 200
 
 	#result = requests.get("https://www.lexico.com/en/definition/" + word)
 	url =  "https://www.lexico.com/en/definition/" + word
-	result = session.get(url, headers=headers)
+	
+	response = requests.get(url, proxies=proxies, headers=headers)
+	#response = session.get(url, headers=headers)
 
+	if (response.status_code == DATA_STATUS_OK):
+		if (response.content):
+			try:
+				soup = BeautifulSoup(response.content, 'lxml')
+				#statusMessage = "Successfully get the word: " + word
+							
+				#print(data)
+				return (str(soup)) 
+			except:				
+				#statusMessage = "An exception occurred while getting " + word
+				return (None)
+	
 
-	src = result.content
-
-	soup = BeautifulSoup(src, 'lxml')
-
-	#print(soup.prettify())
-
-
-	scans = soup.find_all(["span", "strong", {"class": "syn"}, "p"])
-
-	#print(scans)
-
-	wordObject = processPage(scans)
-
-	return(wordObject)
 
 
 if __name__ == "__main__":
 
-	WORD = "sheep"
+	WORD = "a"
 	dirOut = "E:/FULLTEXT/LEXICO" 
-	pathOut = dirOut + '/' +  WORD + ".json"
-	session, headers = getSafeSession()
-	#print('session', session)
-	#print('headers', headers)
-	wordObject = getLexico(WORD, session, headers)
+	pathOut = dirOut + '/' +  WORD + ".html"
+
+	proxies = startPrivateProxy()
+
+	user_agent = getRamdomUserAgent()		
+	headers = {'User-Agent': user_agent}
+
+
+	htmlContent = getLexico(WORD, proxies, headers)
+	if(htmlContent):
+		with open(pathOut, "w", encoding='utf-8') as file:
+			file.write(htmlContent)
 	#print(wordObject)
-	writeJSON(wordObject, pathOut)
+	#writeJSON(wordObject, pathOut)
 	openDir(dirOut)
 	
