@@ -38,7 +38,7 @@ def getLexico(word, proxies, headers):
 
 if __name__ == "__main__":
 
-	WORD = "at"
+	WORD = "go"
 	dirOut = "E:/FULLTEXT/LEXICO/HTML" 
 	pathOut = dirOut + '/' +  WORD + ".html"
 

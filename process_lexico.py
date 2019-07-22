@@ -8,53 +8,81 @@ def hasNumber(sInput):
 	return bool(re.search(r'\d', sInput))
 
 def extractHW(sInput):
-	sOutput = ''
+	sWord = ''
+	sNumber = ''
 	if (hasNumber(sInput)):
-		sOutput = re.sub(r'\d', '', sInput)
+		sWord = re.sub(r'\d', '', sInput)
+		if(sWord):
+			temps = sInput.split(sWord)
+			sNumber = temps[1]
 	else:
-		sOutput = sInput.strip()
-	return sOutput
+		sWord = sInput.strip()
+	return sWord, sNumber
 
 
 def processSpan(item):
 	#spanString = str(item)
 	#spanText = item.get_text()
-	span = ''
+	spans = []
 	if item.has_attr('class'):
 		className = item['class'][0] 
 		if(className == 'hw'):
 			if(item.get_text().strip()):
-				span = '[head-word]' + extractHW(item.get_text())
+				sWord, sNumber = extractHW(item.get_text())
+				if(sWord):
+					span = '[headword]' + sWord
+					spans.append(span)
+				if(sNumber):
+					span = '[graphnum]' + sNumber
+					spans.append(span)
+
 		elif(className == 'phoneticspelling'):
 			if(item.get_text().strip()):
 				span = '[phonetic]' + item.get_text()
+				spans.append(span)
 		elif(className == 'pos'):
 			if(item.get_text().strip()):
 				span = '[category]' + item.get_text()
+				spans.append(span)
 		elif(className == 'iteration'):
 			if(item.get_text().strip()):
-				span = '[senseno]' + item.get_text()
+				span = '[sensenum]' + item.get_text()
+				spans.append(span)
 		elif(className == 'subsenseIteration'):
 			if(item.get_text().strip()):
-				span = '[senseno]' + item.get_text()		
+				span = '[sensenum]' + item.get_text()
+				spans.append(span)		
 		elif(className == 'inflection-text'):
+			temp = item.get_text().strip()
+			itemText = temp.replace(',', '') 
+			if(itemText):
+				span = '[inflects]' + itemText
+				spans.append(span)
+
+		elif(className == 'form-groups'):
 			if(item.get_text().strip()):
-				span = '[inflection]' + item.get_text()
+				span = '[notebold]' + item.get_text()
+				spans.append(span)
+				
 		elif(className == 'grammatical_note'):
 			if(item.get_text().strip()):
-				span = '[grammar]' + item.get_text()
+				span = '[notegram]' + item.get_text()
+				spans.append(span)
 		elif(className == 'sense-registers'):
 			if(item.get_text().strip()):
-				span = '[grammar]' + item.get_text()
+				span = '[notetone]' + item.get_text()
+				spans.append(span)
 		elif(className == 'sense-regions'):
 			if(item.get_text().strip()):
-				span = '[grammar]' + item.get_text()				
+				span = '[notearea]' + item.get_text()
+				spans.append(span)				
 		elif(className == 'ind'):
 			if(item.get_text().strip()):
-				span = '[meaning]' + item.get_text()
+				span = '[wmeaning]' + item.get_text()
+				spans.append(span)
 
 
-	return span
+	return spans
 
 def processDiv(item):
 	divData = []
@@ -62,7 +90,7 @@ def processDiv(item):
 	if item.has_attr('class'):
 		className = item['class'][0] 
 		if(className == 'variant'):
-			div = '[variant]' + item.get_text()
+			div = '[variants]' + item.get_text()
 			divData.append(div)
 		elif (className == 'senseInnerWrapper'):
 			if item.parent.has_attr('class'):
@@ -71,18 +99,15 @@ def processDiv(item):
 					textH3 = item.parent.find('h3').get_text()
 					textP = item.find('p').get_text()
 					if (textH3 == 'Usage'):						
-						div = '[usage]' + textP
+						div = '[wrdusage]' + textP
 						divData.append(div)
 					elif (textH3 == 'Origin'):
-						div = '[origin]' + textP
+						div = '[wordroot]' + textP
 						divData.append(div)
 					elif (textH3 == 'Phrases'):
-						div = '[phrases]'
+						div = '[wphrases]'
 						divData.append(div)
-						phrase = item.find('strong', {'class': 'phrase'})
-						phraseText = phrase.get_text()
-						if(phraseText):
-							divData.append('[phrase]' + phraseText)
+
 
 
 					
@@ -97,9 +122,21 @@ def processEm(item):
 		if (parentClass == 'ex'):
 			itemText = item.get_text()
 			if(itemText):
-				em = '[example]' + itemText.strip()		
+				em = '[wexample]' + itemText.strip()		
 	
 	return(em)
+
+def processStrong(item):
+	strong = ''
+	
+	if item.has_attr('class'):
+		itemClass = item['class'][0]
+		if (itemClass == 'phrase'):
+			itemText = item.get_text()
+			if(itemText):
+				strong = '[phrshead]' + itemText.strip()		
+	
+	return strong
 
 
 
@@ -108,15 +145,16 @@ def processEm(item):
 
 def processLexico(contents):
 	soup = BeautifulSoup(contents, "lxml")
-	itemList = soup.find_all(['span', 'em', 'div'])
+	itemList = soup.find_all(['span', 'em', 'div', 'strong'])
 	
 	itemData = []
 
 	for item in itemList:
 		if (item.name == 'span'):
-			wordSpan = processSpan(item)
-			if(wordSpan):
-				itemData.append(wordSpan)
+			wordSpans = processSpan(item)
+			if(wordSpans):
+				for wordSpan in wordSpans:
+					itemData.append(wordSpan)
 		elif (item.name == 'em'):
 			wordEm = processEm(item)
 			if(wordEm):
@@ -126,7 +164,10 @@ def processLexico(contents):
 			if(wordDivs):
 				for wordDiv in wordDivs:
 					itemData.append(wordDiv)
-
+		elif (item.name == 'strong'):
+			wordStrong = processStrong(item)
+			if(wordStrong):
+				itemData.append(wordStrong)
 	return itemData
 
 	#entryList = soup.find_all('div', {'class' : 'entryWrapper'})
@@ -143,7 +184,7 @@ def processLexico(contents):
 
 if __name__ == "__main__":
 
-	WORD = "at"
+	WORD = "go"
 	dirOut = "E:/FULLTEXT/LEXICO/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/HTML/" + WORD + ".html"
 	pathOut = getFilePath(pathIn, dirOut)
