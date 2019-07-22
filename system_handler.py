@@ -1,13 +1,14 @@
 import json, os, sys
 
 
-def getFilePath(pathIn):
+def getFilePath(pathIn, dirOut):
+	EXT = ".txt"
 	temp_path = pathIn
-	pathOut = os.path.basename(temp_path)
-	#fname, fext = os.path.splitext(temp_path)
-	#pathOut =  os.path.join(dirOut, fname + JSON_EXTENSION) 
+	temp_path = os.path.basename(temp_path)
+	fname, fext = os.path.splitext(temp_path)
+	pathOut =  os.path.join(dirOut, fname + EXT) 
 	#pathOut =  os.path.join(dirOut, FILNAME_OUT) 
-	return(pathOut)
+	return pathOut
 
 
 

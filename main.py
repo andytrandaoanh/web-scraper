@@ -13,6 +13,9 @@ def getLexico(word, proxies, headers):
 	DATA_STATUS_OK = 200
 
 	#result = requests.get("https://www.lexico.com/en/definition/" + word)
+	
+
+
 	url =  "https://www.lexico.com/en/definition/" + word
 	
 	response = requests.get(url, proxies=proxies, headers=headers)
@@ -35,8 +38,8 @@ def getLexico(word, proxies, headers):
 
 if __name__ == "__main__":
 
-	WORD = "a"
-	dirOut = "E:/FULLTEXT/LEXICO" 
+	WORD = "at"
+	dirOut = "E:/FULLTEXT/LEXICO/HTML" 
 	pathOut = dirOut + '/' +  WORD + ".html"
 
 	proxies = startPrivateProxy()
@@ -45,11 +48,12 @@ if __name__ == "__main__":
 	headers = {'User-Agent': user_agent}
 
 
-	htmlContent = getLexico(WORD, proxies, headers)
+	formatWord = WORD.replace(' ' , '_').lower()
+	
+	
+	htmlContent = getLexico(formatWord, proxies, headers)
 	if(htmlContent):
 		with open(pathOut, "w", encoding='utf-8') as file:
 			file.write(htmlContent)
-	#print(wordObject)
-	#writeJSON(wordObject, pathOut)
 	openDir(dirOut)
 	
