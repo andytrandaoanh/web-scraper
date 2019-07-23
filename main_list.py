@@ -9,14 +9,16 @@ from start_private_proxy import startPrivateProxy
 
 
 
-def getLexico(word, proxies, headers):
+def getLexico(word, index, proxies, headers):
 	DATA_STATUS_OK = 200
 
 	#result = requests.get("https://www.lexico.com/en/definition/" + word)
 	
 
-
-	url =  "https://www.lexico.com/en/definition/" + word
+	if (index):
+		url =  "https://www.lexico.com/en/list/" + word + '/' + index
+	else:
+		url =  "https://www.lexico.com/en/list/" + word
 	
 	response = requests.get(url, proxies=proxies, headers=headers)
 	#response = session.get(url, headers=headers)
@@ -38,9 +40,10 @@ def getLexico(word, proxies, headers):
 
 if __name__ == "__main__":
 
-	WORD = "tie"
-	dirOut = "E:/FULLTEXT/LEXICO/HTML" 
-	pathOut = dirOut + '/' +  WORD + ".html"
+	WORD = "k"
+	INDEX = ""
+	dirOut = "E:/FULLTEXT/LEXICO/LIST/HTML" 
+	pathOut = dirOut + '/list' +  WORD + INDEX + ".html"
 
 	proxies = startPrivateProxy()
 
@@ -48,10 +51,9 @@ if __name__ == "__main__":
 	headers = {'User-Agent': user_agent}
 
 
-	formatWord = WORD.replace(' ' , '_').lower()
 	
 	
-	htmlContent = getLexico(formatWord, proxies, headers)
+	htmlContent = getLexico(WORD, INDEX, proxies, headers)
 	if(htmlContent):
 		with open(pathOut, "w", encoding='utf-8') as file:
 			file.write(htmlContent)

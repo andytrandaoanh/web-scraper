@@ -78,7 +78,7 @@ def processSpan(item):
 				spans.append(span)				
 		elif(className == 'ind'):
 			if(item.get_text().strip()):
-				span = '[wmeaning]' + item.get_text()
+				span = '[meanings]' + item.get_text()
 				spans.append(span)
 
 
@@ -122,7 +122,7 @@ def processEm(item):
 		if (parentClass == 'ex'):
 			itemText = item.get_text()
 			if(itemText):
-				em = '[wexample]' + itemText.strip()		
+				em = '[examples]' + itemText.strip()		
 	
 	return(em)
 
@@ -136,6 +136,11 @@ def processStrong(item):
 			if(itemText):
 				strong = '[phrshead]' + itemText.strip()		
 	
+	else:
+		itemText = item.get_text()
+		if (itemText == 'Phrasal Verbs'):
+			strong = '[phrverbs]'
+
 	return strong
 
 
@@ -184,7 +189,7 @@ def processLexico(contents):
 
 if __name__ == "__main__":
 
-	WORD = "go"
+	WORD = "tie"
 	dirOut = "E:/FULLTEXT/LEXICO/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/HTML/" + WORD + ".html"
 	pathOut = getFilePath(pathIn, dirOut)
