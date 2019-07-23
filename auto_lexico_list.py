@@ -38,9 +38,9 @@ def getLexico(word, index, proxies, headers):
 	
 
 def main(dirOut):
-	WORD = "j"
+	WORD = "z"
 	START_NUMBER = 2 
-	STOP_NUMBER	 = 8
+	STOP_NUMBER	 = 3
 	STEP_NUMBER = 1
 	
 	proxies = startPrivateProxy()

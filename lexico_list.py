@@ -13,7 +13,7 @@ def processLexicoList(contents, word):
 
 	for item in itemList:
 		hrefText = str(item['href'])
-		if ('/en/definition/' + word) in hrefText:
+		if ('/en/definition/') in hrefText:
 			#print(item.get_text(), '\n')
 			itemData.append(item.get_text())
 	return itemData	
@@ -28,8 +28,8 @@ def processLexicoList(contents, word):
 
 if __name__ == "__main__":
 
-	WORD = "k"
-	INDEX = ""
+	WORD = "0"
+	INDEX = "3"
 	dirOut = "E:/FULLTEXT/LEXICO/LIST/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/LIST/HTML/List" + WORD + INDEX + ".html"
 	pathOut = getFilePath(pathIn, dirOut)

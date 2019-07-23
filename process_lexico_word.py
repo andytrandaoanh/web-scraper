@@ -80,6 +80,12 @@ def processSpan(item):
 			if(item.get_text().strip()):
 				span = '[meanings]' + item.get_text()
 				spans.append(span)
+		elif(className == 'syn'):
+			if(item.get_text().strip()):
+				span = '[synotail]' + item.get_text()
+				spans.append(span)
+
+
 
 
 	return spans
@@ -135,7 +141,10 @@ def processStrong(item):
 			itemText = item.get_text()
 			if(itemText):
 				strong = '[phrshead]' + itemText.strip()		
-	
+		elif (itemClass == 'syn'):
+			itemText = item.get_text()
+			if(itemText):
+				strong = '[synohead]' + itemText.strip()			
 	else:
 		itemText = item.get_text()
 		if (itemText == 'Phrasal Verbs'):
@@ -182,14 +191,11 @@ def processLexico(contents):
 
 	
 
-
-
-
 	
 
 if __name__ == "__main__":
 
-	WORD = "tie"
+	WORD = "work"
 	dirOut = "E:/FULLTEXT/LEXICO/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/HTML/" + WORD + ".html"
 	pathOut = getFilePath(pathIn, dirOut)

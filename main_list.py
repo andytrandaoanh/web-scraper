@@ -40,8 +40,8 @@ def getLexico(word, index, proxies, headers):
 
 if __name__ == "__main__":
 
-	WORD = "k"
-	INDEX = ""
+	WORD = "0"
+	INDEX = "3"
 	dirOut = "E:/FULLTEXT/LEXICO/LIST/HTML" 
 	pathOut = dirOut + '/list' +  WORD + INDEX + ".html"
 
