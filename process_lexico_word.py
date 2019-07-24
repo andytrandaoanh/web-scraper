@@ -201,7 +201,7 @@ def processLexico(contents):
 
 if __name__ == "__main__":
 
-	WORD = "work"
+	WORD = "travel"
 	dirOut = "E:/FULLTEXT/LEXICO/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/HTML/" + WORD + ".html"
 	pathOut = getFilePath(pathIn, dirOut)
