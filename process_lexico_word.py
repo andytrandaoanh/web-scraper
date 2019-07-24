@@ -82,7 +82,7 @@ def processSpan(item):
 				spans.append(span)
 		elif(className == 'syn'):
 			if(item.get_text().strip()):
-				span = '[synotail]' + item.get_text()
+				span = '[synonyms]' + item.get_text()
 				spans.append(span)
 
 
@@ -109,9 +109,6 @@ def processDiv(item):
 						divData.append(div)
 					elif (textH3 == 'Origin'):
 						div = '[wordroot]' + textP
-						divData.append(div)
-					elif (textH3 == 'Phrases'):
-						div = '[wphrases]'
 						divData.append(div)
 
 
@@ -144,11 +141,20 @@ def processStrong(item):
 		elif (itemClass == 'syn'):
 			itemText = item.get_text()
 			if(itemText):
-				strong = '[synohead]' + itemText.strip()			
+				strong = '[synonyms]' + itemText.strip()			
 	else:
 		itemText = item.get_text()
 		if (itemText == 'Phrasal Verbs'):
-			strong = '[phrverbs]'
+			strong = '[secphrasal]Phrasal Verbs'
+		elif (itemText == 'Phrases'):
+			strong = '[secphrases]Phrases'
+		elif (itemText == 'Pronunciation'):
+			strong = '[secpronun]Pronunciation'
+		elif (itemText == 'Usage'):
+			strong = '[secusage]Usage'
+		elif (itemText == 'Origin'):
+			strong = '[secorigin]Origin'
+
 
 	return strong
 
