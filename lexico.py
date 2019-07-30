@@ -165,8 +165,8 @@ def startLoop(startNumber, mode, location):
 	
 
 	#PATH TO PROXY LIST
-	pathList = 'D:/Proxy/Filter/good_proxy_list.txt'
-	#pathList = 'D:/Proxy/List/raw_list_general.txt'
+	#pathList = 'D:/Proxy/Filter/good_proxy_list.txt'
+	pathList = 'D:/Proxy/List/raw_list_general.txt'
 	myProxy  = ProxyEngine (pathList)
 	myProxy.loadData()
 
@@ -188,12 +188,14 @@ def startLoop(startNumber, mode, location):
 		while not proxyOK:
 			try:
 				proxies = myProxy.nextProxy()
+				badIP = proxies['http']
+				print('Attemping on', badIP, '...')
 				urlTest = "http://icanhazip.com"
 				resTest = requests.get(urlTest, proxies=proxies, headers=headers)
 				#print('using IP:', resTest.text)
 				proxyOK = True
 			except Exception as e:
-				print(e)
+				print('Test failed on icanhazip.com')
 
 		if proxies:
 			print(proxies)
@@ -209,15 +211,16 @@ def startLoop(startNumber, mode, location):
 			try:
 				response = requests.get(url, proxies=proxies, headers=headers)
 				if response.status_code == 200:
-					#pathLog = 'D:/Proxy/Filter/good_proxy_list.txt'
+					pathLog = 'D:/Proxy/Filter/good_proxy_list.txt'
 					goodIP = proxies['http']
 					print('Discoved good proxy:', goodIP)
-					#with open(pathLog, "a") as myfile:
-					#	myfile.write(goodIP + '\n')
+					with open(pathLog, "a") as myfile:
+						myfile.write(goodIP + '\n')
 
 
 			except Exception as e:
-				print (e)
+				#print (e)
+				print('Test failed on dictionary.cambridge.org')
 			
 			#runDownLoad(i, proxies, headers, mode, location)
 			time.sleep(3)
@@ -225,6 +228,6 @@ def startLoop(startNumber, mode, location):
 
 if __name__ == '__main__':
 
-	startNumber = 2700
+	startNumber = 4700
 	startLoop(startNumber, 'local', 'office')
 
