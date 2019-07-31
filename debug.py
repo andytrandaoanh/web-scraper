@@ -102,9 +102,6 @@ def processDiv(item):
 					elif (textH3 == 'Origin'):
 						div = '[wordroot]' + textP
 						divData.append(div)
-		elif (className == 'crossReference'):
-			div = '[crossref]' + item.get_text()
-			divData.append(div)
 
 
 
@@ -201,7 +198,7 @@ def processLexico(contents):
 
 if __name__ == "__main__":
 
-	WORD = "Aboriginalization"
+	WORD = "a"
 	dirOut = "E:/FULLTEXT/LEXICO/TEXT"
 	pathIn = "E:/FULLTEXT/LEXICO/HTML/" + WORD + ".html"
 	pathOut = getFilePath(pathIn, dirOut)
