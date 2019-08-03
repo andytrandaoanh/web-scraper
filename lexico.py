@@ -171,7 +171,8 @@ def startLoop(startNumber, mode, location):
 	myProxy.loadData()
 
 
-	pathDict = 'E:/FULLTEXT/DICTIONARY/LOWERCASE/NLTK_Dictionary.txt'
+
+	pathDict = 'E:/FULLTEXT/DICTIONARY/SPECIALTY/British_standards.txt'
 
 	myDict = DictEngine(pathDict, START_NUMBER)
 	myDict.loadData()
@@ -228,6 +229,6 @@ def startLoop(startNumber, mode, location):
 
 if __name__ == '__main__':
 
-	startNumber = 4700
+	startNumber = 1
 	startLoop(startNumber, 'local', 'office')
 
